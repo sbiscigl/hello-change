@@ -80,6 +80,7 @@ class MoneyStore implements IMoneyStore {
 
     private Map<Integer, Integer> makeChange(Map<Integer, Integer> map, int sum) {
 
+        //Flatten out list to list of all bills
         List<Integer> allBills = new ArrayList<>();
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
             for (int i = 0; i < entry.getValue(); i++) {
@@ -87,9 +88,11 @@ class MoneyStore implements IMoneyStore {
             }
         }
 
+        //Find all subsets that add up to the sum
         List<List<Integer>> subsets = new ArrayList<>();
         findSubsets(allBills, sum, new ArrayList<>(), subsets);
 
+        //Find the subset that has the smallest amount of bills
         List<Integer> smallest = new ArrayList<>();
         if (subsets.size() > 0) {
             smallest = subsets.get(0);
@@ -100,6 +103,7 @@ class MoneyStore implements IMoneyStore {
             }
         }
 
+        //Assemble back into map that represents values
         Map<Integer, Integer> changeMap = new HashMap<>();
         Amounts.amounts.forEach(i -> changeMap.put(i, 0));
         smallest.forEach( i -> {
